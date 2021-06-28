@@ -9,7 +9,7 @@ extents = Vector2( 127.457, 21.0486 )
 [node name="LevelTemplate" type="Node2D"]
 
 [node name="Floor" type="StaticBody2D" parent="."]
-position = Vector2( -240, 0 )
+position = Vector2( -229.898, -2.10223 )
 scale = Vector2( 6.7377, 1.19948 )
 
 [node name="ColorRect" type="ColorRect" parent="Floor"]
@@ -33,7 +33,7 @@ position = Vector2( 78.5246, -29.695 )
 current = true
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
-drag_margin_left = 0.5
+drag_margin_left = 0.25
 drag_margin_top = 0.5
 drag_margin_right = 0.5
 drag_margin_bottom = 0.25
