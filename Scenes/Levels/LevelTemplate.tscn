@@ -1,16 +1,46 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scenes/Characters/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Assets/General/pixelart-1624786906196-8946.jpg" type="Texture" id=2]
+[ext_resource path="res://Assets/Background/test-background_0005_Layer-1.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/Characters/Goblin.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Assets/Background/test-background_0003_Layer-2.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Background/test-background_0001_Layer-11.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Background/test-background_0000_Layer-4.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Background/test-background_0004_sun.png" type="Texture" id=7]
+[ext_resource path="res://Assets/Background/test-background_0002_Layer-10.png" type="Texture" id=8]
+[ext_resource path="res://src/CloudLayer.gd" type="Script" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 127.457, 21.0486 )
 
 [node name="LevelTemplate" type="Node2D"]
 
+[node name="Floor2" type="StaticBody2D" parent="."]
+position = Vector2( 116.439, 41.5194 )
+scale = Vector2( 0.5, 0.5 )
+collision_layer = 2
+collision_mask = 21
+
+[node name="ColorRect" type="ColorRect" parent="Floor2"]
+margin_top = 118.0
+margin_right = 255.0
+margin_bottom = 158.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2"]
+position = Vector2( 127.786, 138.898 )
+shape = SubResource( 1 )
+
+[node name="Goblin" parent="." instance=ExtResource( 3 )]
+position = Vector2( 172.867, 47.7669 )
+
 [node name="Floor" type="StaticBody2D" parent="."]
-position = Vector2( -229.898, -2.10223 )
+position = Vector2( -235.73, 0.361977 )
 scale = Vector2( 6.7377, 1.19948 )
+collision_layer = 2
+collision_mask = 21
 
 [node name="ColorRect" type="ColorRect" parent="Floor"]
 margin_top = 118.0
@@ -26,7 +56,7 @@ position = Vector2( 127.786, 138.898 )
 shape = SubResource( 1 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 49.4754, 85.695 )
+position = Vector2( 48.7529, 101.439 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2( 78.5246, -29.695 )
@@ -34,20 +64,123 @@ current = true
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 drag_margin_left = 0.25
-drag_margin_top = 0.5
+drag_margin_top = 1.0
 drag_margin_right = 0.5
-drag_margin_bottom = 0.25
+drag_margin_bottom = 0.3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="Player/Camera2D"]
 
-[node name="ParallaxLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
+[node name="BackgroundLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
+motion_scale = Vector2( 0, 0 )
+motion_mirroring = Vector2( 256, 144 )
+
+[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/BackgroundLayer"]
+margin_right = 512.0
+margin_bottom = 288.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 2 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SunLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
+position = Vector2( -42.3785, 2.11893 )
+motion_scale = Vector2( 0, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/SunLayer"]
+margin_left = -92.7172
+margin_top = -54.4914
+margin_right = 419.283
+margin_bottom = 233.509
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SkyLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
+motion_scale = Vector2( 0.2, 0.2 )
 motion_mirroring = Vector2( 256, 0 )
 
-[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/ParallaxLayer"]
-margin_right = 40.0
-margin_bottom = 40.0
-rect_scale = Vector2( 0.26644, 0.271 )
-texture = ExtResource( 2 )
+[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/SkyLayer"]
+margin_left = 3.05176e-05
+margin_top = -66.4308
+margin_right = 512.0
+margin_bottom = 221.569
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 4 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CloudLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
+position = Vector2( 0, -0.21022 )
+motion_scale = Vector2( 0.3, 1 )
+motion_mirroring = Vector2( 256, 144 )
+script = ExtResource( 9 )
+cload_speed = -5.0
+
+[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/CloudLayer"]
+margin_right = 512.0
+margin_bottom = 288.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 6 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MountiansLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
+motion_scale = Vector2( 0.5, 0.5 )
+motion_mirroring = Vector2( 256, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/MountiansLayer"]
+margin_left = -0.840912
+margin_top = -31.1132
+margin_right = 511.159
+margin_bottom = 256.887
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 8 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ParallaxForeground" type="ParallaxBackground" parent="Player/Camera2D"]
+layer = 1
+
+[node name="CloudLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxForeground"]
+visible = false
+position = Vector2( 0, -0.21022 )
+motion_scale = Vector2( 0.8, 1 )
+motion_mirroring = Vector2( 256, 144 )
+script = ExtResource( 9 )
+cload_speed = -5.0
+
+[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxForeground/CloudLayer"]
+margin_right = 512.0
+margin_bottom = 288.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 6 )
+expand = true
+flip_h = true
+flip_v = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GroundLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxForeground"]
+motion_scale = Vector2( 2, 1 )
+motion_mirroring = Vector2( 256, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxForeground/GroundLayer"]
+margin_right = 512.0
+margin_bottom = 288.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 5 )
+expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

@@ -1,86 +1,96 @@
 extends KinematicBody2D
 
-var velocity = Vector2.ZERO
 export var speed = 100
 export var bullet_speed = 500
 export var gravity = 400
 export var max_jump_speed = 200
 export (float, 0, 1.0) var friction = 0.1
 export (float, 0, 1.0) var acceleration = 0.25
-export var reloadAnimTime = 2
-export var nextShotAnimTime = 0.5
 
-var lance
-var animation
-var OverHeat
-var color
-var gunlance 
+var cooldowntime
+var cooldown_timer
+var lastcolor
+var velocity = Vector2.ZERO
+var nextShotAnimTime = 0.5
 var tween_ready = true
-
+var is_hit = false
+var is_invincible = false
 var bullet = preload("res://Scenes/Items/Bullet.tscn")
 
+#Get information on players status form the gamestate
 func _ready():
-	animation = $AnimationPlayer
-	lance = $LancePivot
-	OverHeat = $LancePivot/Lance/OverHeat
-	color = $LancePivot/Lance.modulate
-	gunlance = $LancePivot/Lance/GunLance	
+	cooldown_timer = $LancePivot/Lance/cooldownTimer
+	$LancePivot/Lance.modulate = gamestate.color
+	cooldowntime = cooldown_timer.get_wait_time()
 
+#Physics process for input and movment
 func _physics_process(delta):
-	get_input()
-	velocity.y += gravity * delta
-	velocity = move_and_slide(velocity, Vector2.UP)
+	if gamestate.is_dead == false:
+		get_input()
+		velocity.y += gravity * delta
+		velocity = move_and_slide(velocity, Vector2.UP)
 
+#Process input into movment and actions
 func get_input():
 	if is_on_floor():	
 		var dir = 0
-		if Input.is_action_pressed("Right"):
-			animation_player("walk",false)
+		if Input.is_action_pressed("Right") and not is_hit:
+			animation_sprite("walk",false)
 			dir += 1
-		if Input.is_action_pressed("Left"):
-			animation_player("walk",true)
+		if Input.is_action_pressed("Left") and not is_hit:
+			animation_sprite("walk",false)
 			dir -= 1
 		if dir != 0:
 			velocity.x = lerp(velocity.x, dir * speed, acceleration)
 		else:
 			velocity.x = lerp(velocity.x, 0, friction)
-			animation_player("idle",false)
-			
+			if not is_hit:
+				animation_sprite("idle",false)
 	else:
-		jump_animation()
-		
-	if Input.is_action_pressed("Action") and tween_ready:
-		if gamestate.shots > 0:
-			fire()
-			tween_animation("shot")
-			animation.play("GunAttack")
-			jump()
-		else:
-			tween_animation("reload")
+		if not is_hit:
+			jump_animation()
 	
-	if Input.is_action_pressed("Reload") and tween_ready:
-		tween_animation("reload")
+	if is_invincible == false:	
+		if Input.is_action_pressed("Action") and tween_ready:
+			if gamestate.shots > 0:
+				tween_cooldown("stop")
+				cooldown_timer.start()
+				fire()
+				tween_overheat("shot")
+				animation_player("GunAttack")
+				jump()
+			else:
+				tween_cooldown("stop")
+				tween_overheat("reload")
+	
+		if Input.is_action_pressed("Reload") and tween_ready:
+			tween_cooldown("stop")
+			tween_overheat("reload")
 
+#Calculate the jump and slide trajectory after firing
 func jump():
 	var rotation = calc_rotation_percent()
 		
-	if(rotation[1] > 0 and rotation[1] <= 90):	
-		velocity.x = -(max_jump_speed * (1 - rotation[0]*4))
+	if(rotation > 0 and rotation <= 0.25):	
+		velocity.x = -(max_jump_speed * (1 - rotation*4))
 		velocity.y = -(max_jump_speed + (velocity.x))
 		
-	elif(rotation[1] > 90 and rotation[1] <= 180):
-		velocity.x = (max_jump_speed * ((rotation[0]-0.25) * 4))
+	elif(rotation > 0.25 and rotation <= 0.5):
+		velocity.x = (max_jump_speed * ((rotation-0.25) * 4))
 		velocity.y = ((velocity.x) - max_jump_speed)
 
-	elif(rotation[1] > 180 and rotation[1] <= 270):
-		velocity.x = (max_jump_speed * (1 - (rotation[0] - 0.5) * 4))
+	elif(rotation > 0.5 and rotation <= 0.75):
+		velocity.x = (max_jump_speed * (1 - (rotation - 0.5) * 4))
 		velocity.y = (max_jump_speed - (velocity.x))
 
 	else:
-		velocity.x = -(max_jump_speed * (rotation[0]-0.75) * 4)
+		velocity.x = -(max_jump_speed * (rotation-0.75) * 4)
 		velocity.y = (max_jump_speed + velocity.x)
 
+#Instance a bullet after firing
 func fire():
+	var lance = $LancePivot
+	var gunlance = $LancePivot/Lance/GunLance	
 	var bullet_instance = bullet.instance()
 	
 	gamestate.shots -= 1
@@ -89,29 +99,52 @@ func fire():
 	bullet_instance.apply_impulse(Vector2(), Vector2(bullet_speed,0).rotated(lance.rotation))
 	gunlance.add_child(bullet_instance)
 
-func animation_player(animationPlayer,reverse):
-	$PlayerBody.play(animationPlayer,reverse)
-
+#Handle the jump sprite based on the character movment up or down
 func jump_animation():
 	if velocity.y > 0:
-		animation_player("jumpDown",false)
+		animation_sprite("jumpDown",false)
 	elif velocity.y < 0:
-		animation_player("jumpUp",false)
-		
-func tween_animation(tweenAnimation):
+		animation_sprite("jumpUp",false)
+
+#Handle the animated sprite animations
+func animation_sprite(animationSprite,reverse):
+	$PlayerBody.play(animationSprite,reverse)
+
+#Handle the animation player animations
+func animation_player(animationPlayer):
+	$AnimationPlayer.play(animationPlayer)
+
+#Handle the tween overheat animations
+func tween_overheat(tweenAnimation):
+	var OverHeat = $LancePivot/Lance/OverHeat
+	
 	if tweenAnimation == "shot":
-		OverHeat.interpolate_property($LancePivot/Lance, "modulate", color, color - Color(0,0.15,0.15,0), nextShotAnimTime, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		color -= Color(0,0.15,0.15,0)
+		lastcolor = $LancePivot/Lance.modulate
+		OverHeat.interpolate_property($LancePivot/Lance, "modulate", lastcolor, gamestate.color - Color(0,0.15,0.15,0), nextShotAnimTime, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		OverHeat.start()
+		tween_ready = false
+		
 	if tweenAnimation == "reload":
-		OverHeat.interpolate_property($LancePivot/Lance, "modulate", color, Color(1,1,1,1), reloadAnimTime, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		color = Color(1,1,1,1)
+		gamestate.color = $LancePivot/Lance.modulate
+		OverHeat.interpolate_property($LancePivot/Lance, "modulate", gamestate.color, Color(1,1,1,1), calc_reloadtime(), Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		gamestate.shots = gamestate.maxShots
 		OverHeat.start()
-		
-	tween_ready = false
+		tween_ready = false
 
+#Handle the tween cooldown animations
+func tween_cooldown(tweenAnimation):
+	var CoolDown = $LancePivot/Lance/CoolDown
+	
+	if tweenAnimation == "stop":
+		CoolDown.remove_all()
+		
+	if tweenAnimation == "cooldown":
+		CoolDown.interpolate_property($LancePivot/Lance, "modulate", gamestate.color, Color(1,1,1,1), cooldowntime, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		CoolDown.start()
+
+#Normalize the lance rotation percent to be 0 - 1.0
 func calc_rotation_percent():
+	var lance = $LancePivot
 	var rotation_percent
 	var rotation_chk =int(lance.rotation_degrees / 360)
 	
@@ -122,7 +155,76 @@ func calc_rotation_percent():
 	
 	rotation_percent = rotation_chk / 360
 	
-	return [rotation_percent, rotation_chk]
+	return rotation_percent
 
+#Calculate reload time
+func calc_reloadtime():
+	var calcReloadtime
+	calcReloadtime = gamestate.reloadAnimTime - (gamestate.color.g * gamestate.reloadAnimTime)
+	return calcReloadtime
+
+#Signal the end of all tween animations
 func _on_OverHeat_tween_all_completed():
 	tween_ready = true
+	gamestate.color = $LancePivot/Lance.modulate
+	tween_cooldown("cooldown")
+	
+#Signal the end of the cooldown timer
+func _on_cooldownTimer_timeout():
+	gamestate.shots = gamestate.maxShots
+
+#Signal the end of the cooldown tween animation
+func _on_CoolDown_tween_all_completed():
+	gamestate.color = $LancePivot/Lance.modulate
+
+func hit(direction):
+	var hitbox = $PlayerHitBox/PlayerCollisionBox
+	var timer = $PlayerBody/Invincibilityframes
+	var lanceCollision = $LancePivot/LanceHitBox
+	
+	hitbox.set_deferred("disabled", true)
+	lanceCollision.set_deferred("disabled", true)
+	self.set_collision_mask_bit(2, false)
+	
+	gamestate.lives -= 1
+	is_hit = true
+	if gamestate.lives == 0:
+		gamestate.is_dead = true
+		death()
+	if gamestate.is_dead == false:
+		is_invincible = true
+		timer.start()
+		animation_sprite("hit",false)
+		animation_player("hit")
+	
+	if direction >= 0:
+		velocity.x = 50
+		velocity.y = -50
+	else:
+		velocity.x = -50
+		velocity.y = -50
+
+func death():
+	animation_sprite("death",false)
+	$deathTimer.start()
+
+func _on_Invincibilityframes_timeout():
+	is_hit = false
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	var hitbox = $PlayerHitBox/PlayerCollisionBox
+	var lanceCollision = $LancePivot/LanceHitBox
+	
+	if anim_name == "hit":
+		is_invincible = false
+		hitbox.set_deferred("disabled", false)
+		lanceCollision.set_deferred("disabled", false)
+		self.set_collision_mask_bit(2, true)
+
+func _on_PlayerHitBox_area_entered(area):
+	if area.name == "HitBox" and not is_hit:
+		hit(self.position.x - area.get_parent().position.x)
+
+func _on_deathTimer_timeout():
+	gamestate.is_dead = false
+	get_tree().quit() 
