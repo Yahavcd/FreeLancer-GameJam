@@ -1,0 +1,66 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/Bird.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Enemies/Bird.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 8.62034, 8.50165 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "Death"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[node name="Bird" type="KinematicBody2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -0.739708, 0.0947969 )
+scale = Vector2( 1.59128, 1.49675 )
+shape = SubResource( 1 )
+
+[node name="Check" type="RayCast2D" parent="."]
+position = Vector2( 0.75, -9.25 )
+rotation = 0.0197915
+scale = Vector2( -1.87166, 0.553151 )
+enabled = true
+collision_mask = 2
+collide_with_areas = true
+
+[node name="FindPlayer" type="RayCast2D" parent="."]
+rotation = 0.872665
+scale = Vector2( 2.26672, 11.1358 )
+enabled = true
+
+[node name="HitBox" type="Area2D" parent="."]
+position = Vector2( -0.31498, 1.89316 )
+scale = Vector2( 1.20898, 1.05667 )
+collision_layer = 4
+collision_mask = 24
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2( -0.333125, -1.76684 )
+scale = Vector2( 1.4147, 1.49254 )
+shape = SubResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Death = SubResource( 2 )
+
+[connection signal="area_entered" from="HitBox" to="." method="_on_HitBox_area_entered"]
+[connection signal="body_entered" from="HitBox" to="." method="_on_HitBox_body_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

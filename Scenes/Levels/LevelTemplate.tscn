@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scenes/Characters/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Assets/Background/test-background_0005_Layer-1.png" type="Texture" id=2]
@@ -9,38 +9,18 @@
 [ext_resource path="res://Assets/Background/test-background_0004_sun.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Background/test-background_0002_Layer-10.png" type="Texture" id=8]
 [ext_resource path="res://src/CloudLayer.gd" type="Script" id=9]
+[ext_resource path="res://Scenes/Characters/Bird.tscn" type="PackedScene" id=10]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 127.457, 21.0486 )
 
 [node name="LevelTemplate" type="Node2D"]
 
-[node name="Floor2" type="StaticBody2D" parent="."]
-position = Vector2( 116.439, 41.5194 )
-scale = Vector2( 0.5, 0.5 )
-collision_layer = 2
-collision_mask = 21
-
-[node name="ColorRect" type="ColorRect" parent="Floor2"]
-margin_top = 118.0
-margin_right = 255.0
-margin_bottom = 158.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2"]
-position = Vector2( 127.786, 138.898 )
-shape = SubResource( 1 )
-
-[node name="Goblin" parent="." instance=ExtResource( 3 )]
-position = Vector2( 172.867, 47.7669 )
-
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2( -235.73, 0.361977 )
 scale = Vector2( 6.7377, 1.19948 )
 collision_layer = 2
-collision_mask = 21
+collision_mask = 0
 
 [node name="ColorRect" type="ColorRect" parent="Floor"]
 margin_top = 118.0
@@ -55,17 +35,35 @@ __meta__ = {
 position = Vector2( 127.786, 138.898 )
 shape = SubResource( 1 )
 
+[node name="Floor2" type="StaticBody2D" parent="."]
+position = Vector2( 92.2796, 56.2099 )
+scale = Vector2( 0.3, 0.3 )
+collision_layer = 2
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Floor2"]
+margin_top = 118.0
+margin_right = 255.0
+margin_bottom = 158.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2"]
+position = Vector2( 127.786, 138.898 )
+shape = SubResource( 1 )
+
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 48.7529, 101.439 )
+position = Vector2( 48.6619, 100.711 )
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-position = Vector2( 78.5246, -29.695 )
+position = Vector2( 38.9266, -29.695 )
 current = true
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
-drag_margin_left = 0.25
+drag_margin_left = 0.0
 drag_margin_top = 1.0
-drag_margin_right = 0.5
+drag_margin_right = 0.0
 drag_margin_bottom = 0.3
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="Player/Camera2D"]
@@ -184,3 +182,9 @@ expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Goblin" parent="." instance=ExtResource( 3 )]
+position = Vector2( 131.032, 82.5248 )
+
+[node name="Bird" parent="." instance=ExtResource( 10 )]
+position = Vector2( 67.9138, 57.0501 )

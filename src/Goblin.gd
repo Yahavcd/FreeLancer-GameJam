@@ -4,10 +4,13 @@ export var speed = 32
 export var gravity = 400
 export (float, 0, 1.0) var friction = 0.1
 export (float, 0, 1.0) var acceleration = 0.25
+export var hit_velocity = 100
 
 var velocity = Vector2.ZERO
 var dir = -1
 var lives = 1
+var is_hit = false
+var is_dead = false
 
 func _physics_process(delta):
 	diraction()
@@ -17,7 +20,7 @@ func _physics_process(delta):
 	
 func move():
 	if is_on_floor():	
-		if dir != 0:
+		if dir != 0 and !is_dead:
 			velocity.x = lerp(velocity.x, dir * speed, acceleration)
 		else:
 			velocity.x = lerp(velocity.x, 0, friction)
@@ -30,11 +33,32 @@ func diraction():
 
 func _on_HitBox_body_entered(body):
 	if body.name == "Bullet":
-		velocity.y = -50
-		velocity.x = dir*velocity.y
+		hit(self.global_position.x - body.global_position.x)
 
 
 func _on_HitBox_area_entered(area):
 	if area.name == "LancePivot":
-		velocity.y = -50
-		velocity.x = dir*velocity.y
+		hit(self.global_position.x - area.get_parent().global_position.x)
+
+
+func hit(direction):
+	lives -= 1
+	is_hit = true
+	if lives == 0:
+		is_dead = true
+		death()
+		
+	velocity.y = -hit_velocity
+	if direction >= 0:
+		velocity.x = hit_velocity
+	else:
+		velocity.x = -hit_velocity
+
+func death():
+	is_dead = true
+	$AnimationPlayer.play("Death")
+	$HitBox/CollisionShape2D.set_deferred("disabled", true)
+	self.set_collision_mask_bit(1, false)
+
+func _on_AnimationPlayer_animation_finished(_anim_name):
+	queue_free()
