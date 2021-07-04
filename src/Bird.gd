@@ -38,6 +38,9 @@ func move():
 			velocity.x = lerp(velocity.x, dir * speed, acceleration)
 		else:
 			velocity.x = lerp(velocity.x, 0, friction)
+		
+		if !is_soaring and !is_attacking:
+			velocity.y = 0
 			
 func diraction():
 	var chk = dir

@@ -3,9 +3,9 @@ extends KinematicBody2D
 export var speed = 150
 export var bullet_speed = 500
 export var gravity = 400
-export var max_jump_speed = 300
+export var max_jump_speed = 200
 export var hit_velocity = 100
-export (float, 0, 1.0) var friction = 0.75
+export (float, 0, 1.0) var friction = 1
 export (float, 0, 1.0) var acceleration = 0.25
 
 var cooldowntime
@@ -29,6 +29,8 @@ func _physics_process(delta):
 	get_input()
 	velocity.y += gravity * delta
 	velocity = move_and_slide(velocity, Vector2.UP)
+#	if is_on_floor():
+#		gamestate.shots = gamestate.maxShots
 
 #Process input into movment and actions
 func get_input():
@@ -69,15 +71,10 @@ func get_input():
 
 #Calculate the jump and slide trajectory after firing
 func jump():
-	var rotation = calc_rotation_percent() * 360
+	var lance = $LancePivot
 
-	velocity.y = cos(deg2rad(rotation)) * max_jump_speed
-	velocity.x = -sin(deg2rad(rotation)) * max_jump_speed
-	
-	if velocity.y > 200:
-		velocity.y = 200
-	if velocity.y < -200:
-		velocity.y = -200
+	velocity.y = cos(deg2rad(lance.rotation_degrees+90)) * max_jump_speed
+	velocity.x += -sin(deg2rad(lance.rotation_degrees+90)) * max_jump_speed
 
 #Instance a bullet after firing
 func fire():
@@ -133,22 +130,6 @@ func tween_cooldown(tweenAnimation):
 	if tweenAnimation == "cooldown":
 		CoolDown.interpolate_property($LancePivot/Lance, "modulate", gamestate.color, Color(1,1,1,1), cooldowntime, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		CoolDown.start()
-
-#Normalize the lance rotation percent to be 0 - 1.0
-func calc_rotation_percent():
-	var lance = $LancePivot
-	var rotation_percent
-	var rotation_chk =int(lance.rotation_degrees/ 360)
-	
-	if lance.rotation_degrees > 0:
-		rotation_chk = abs(lance.rotation_degrees - (rotation_chk * 360))
-	else:	
-		rotation_chk = (abs(rotation_chk) + 1) * 360 + lance.rotation_degrees
-	
-	rotation_percent = (rotation_chk+90) / 360
-	if rotation_percent > 1:
-		rotation_percent = rotation_percent - 1
-	return rotation_percent
 
 #Calculate reload time
 func calc_reloadtime():

@@ -24,20 +24,15 @@ animations = [ {
 "name": "idle",
 "speed": 2.0
 }, {
-"frames": [ ExtResource( 2 ), ExtResource( 10 ) ],
-"loop": false,
-"name": "death",
-"speed": 2.0
-}, {
 "frames": [ ExtResource( 2 ) ],
 "loop": true,
 "name": "hit",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 7 ) ],
-"loop": true,
-"name": "jumpUp",
-"speed": 0.5
+"frames": [ ExtResource( 2 ), ExtResource( 10 ) ],
+"loop": false,
+"name": "death",
+"speed": 2.0
 }, {
 "frames": [ ExtResource( 12 ) ],
 "loop": true,
@@ -48,6 +43,11 @@ animations = [ {
 "loop": true,
 "name": "walk",
 "speed": 7.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "jumpUp",
+"speed": 0.5
 } ]
 
 [sub_resource type="CapsuleShape2D" id=3]
@@ -71,7 +71,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=5]
 resource_name = "hit"
-length = 2.0
+length = 1.4
 tracks/0/type = "value"
 tracks/0/path = NodePath("PlayerBody:self_modulate")
 tracks/0/interp = 1
@@ -79,7 +79,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.3, 0.4, 0.6, 0.7, 0.9, 1, 1.2, 1.3, 1.5, 1.6, 1.8, 1.9 ),
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 0,
 "values": [ Color( 1, 1, 1, 0.0117647 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0117647 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0117647 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0117647 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0117647 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0117647 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.0117647 ), Color( 1, 1, 1, 1 ) ]
@@ -155,7 +155,7 @@ anims/hit = SubResource( 5 )
 collision_mask = 4
 
 [node name="PlayerCollisionBox" type="CollisionShape2D" parent="PlayerHitBox"]
-position = Vector2( 3.30645, 6.07425 )
+position = Vector2( 3.19509, 6.18561 )
 shape = SubResource( 3 )
 
 [node name="deathTimer" type="Timer" parent="."]

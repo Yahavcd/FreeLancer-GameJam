@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Untitled-1_0000_Layer-18.png-d6d7300d763183083a2437383e38c0c8.stex"
+path="res://.import/Assets_0002_rile-3-1.png-c59c0f82c068a02da5b1eeed2206e5ab.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Tilesets/Untitled-1_0000_Layer-18.png"
-dest_files=[ "res://.import/Untitled-1_0000_Layer-18.png-d6d7300d763183083a2437383e38c0c8.stex" ]
+source_file="res://Assets/UI/Assets_0002_rile-3-1.png"
+dest_files=[ "res://.import/Assets_0002_rile-3-1.png-c59c0f82c068a02da5b1eeed2206e5ab.stex" ]
 
 [params]
 

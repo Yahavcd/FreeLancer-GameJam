@@ -1,0 +1,122 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/CloudLayer.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Background/test-background_0003_Layer-2.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Background/test-background_0005_Layer-1.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Background/test-background_0000_Layer-4.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Background/test-background_0002_Layer-10.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Background/test-background_0004_sun.png" type="Texture" id=6]
+
+[node name="Camera2D" type="Camera2D"]
+position = Vector2( 63.2405, -29.2879 )
+current = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+drag_margin_left = 0.0
+drag_margin_top = 1.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.12
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="BackgroundLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0, 0 )
+motion_mirroring = Vector2( 256, 144 )
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/BackgroundLayer"]
+margin_right = 512.0
+margin_bottom = 288.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SunLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2( -42.3785, 2.11893 )
+motion_scale = Vector2( 0, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/SunLayer"]
+margin_left = -92.7172
+margin_top = -54.4914
+margin_right = 419.283
+margin_bottom = 233.509
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SkyLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.2, 0.2 )
+motion_mirroring = Vector2( 256, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/SkyLayer"]
+margin_left = 3.05176e-05
+margin_top = -66.4308
+margin_right = 512.0
+margin_bottom = 221.569
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 2 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CloudLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2( 0, -0.21022 )
+motion_scale = Vector2( 0.3, 1 )
+motion_mirroring = Vector2( 256, 144 )
+script = ExtResource( 1 )
+cload_speed = -5.0
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/CloudLayer"]
+margin_right = 512.0
+margin_bottom = 288.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 4 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MountiansLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.5, 0.5 )
+motion_mirroring = Vector2( 256, 0 )
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/MountiansLayer"]
+self_modulate = Color( 0.745098, 0.745098, 0.745098, 1 )
+margin_left = -0.840912
+margin_top = -31.1132
+margin_right = 511.159
+margin_bottom = 256.887
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 5 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ParallaxForeground" type="ParallaxBackground" parent="."]
+layer = 1
+
+[node name="CloudLayer" type="ParallaxLayer" parent="ParallaxForeground"]
+visible = false
+position = Vector2( 0, -0.21022 )
+motion_scale = Vector2( 0.8, 1 )
+motion_mirroring = Vector2( 256, 144 )
+script = ExtResource( 1 )
+cload_speed = -5.0
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxForeground/CloudLayer"]
+margin_right = 512.0
+margin_bottom = 288.0
+rect_scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 4 )
+expand = true
+flip_h = true
+flip_v = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -1,190 +1,47 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/Characters/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Assets/Background/test-background_0005_Layer-1.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/Cameras/Level1Camera.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/Characters/Goblin.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Assets/Background/test-background_0003_Layer-2.png" type="Texture" id=4]
-[ext_resource path="res://Assets/Background/test-background_0001_Layer-11.png" type="Texture" id=5]
-[ext_resource path="res://Assets/Background/test-background_0000_Layer-4.png" type="Texture" id=6]
-[ext_resource path="res://Assets/Background/test-background_0004_sun.png" type="Texture" id=7]
-[ext_resource path="res://Assets/Background/test-background_0002_Layer-10.png" type="Texture" id=8]
-[ext_resource path="res://src/CloudLayer.gd" type="Script" id=9]
+[ext_resource path="res://Assets/Tilesets/32X32.tres" type="TileSet" id=4]
+[ext_resource path="res://test/Node2D.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/Characters/Bird.tscn" type="PackedScene" id=10]
-
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 127.457, 21.0486 )
 
 [node name="LevelTemplate" type="Node2D"]
 
-[node name="Floor" type="StaticBody2D" parent="."]
-position = Vector2( -235.73, 0.361977 )
-scale = Vector2( 6.7377, 1.19948 )
+[node name="32X32" type="TileMap" parent="."]
+tile_set = ExtResource( 4 )
+cell_size = Vector2( 32, 32 )
 collision_layer = 2
 collision_mask = 0
-
-[node name="ColorRect" type="ColorRect" parent="Floor"]
-margin_top = 118.0
-margin_right = 255.0
-margin_bottom = 158.0
-color = Color( 1, 1, 1, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
-position = Vector2( 127.786, 138.898 )
-shape = SubResource( 1 )
-
-[node name="Floor2" type="StaticBody2D" parent="."]
-position = Vector2( 92.2796, 56.2099 )
-scale = Vector2( 0.3, 0.3 )
-collision_layer = 2
-collision_mask = 0
-
-[node name="ColorRect" type="ColorRect" parent="Floor2"]
-margin_top = 118.0
-margin_right = 255.0
-margin_bottom = 158.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor2"]
-position = Vector2( 127.786, 138.898 )
-shape = SubResource( 1 )
+format = 1
+tile_data = PoolIntArray( 131075, 1, 65539, 131076, 1, 131077, 131077, 1, 65542, 196608, 5, 0, 196610, 7, 0, 196611, 1, 196611, 196612, 1, 131088, 196613, 1, 196614, 196616, 2, 0, 196617, 2, 65543, 196618, 2, 8, 327679, 1, 262154, 262144, 1, 131083, 262145, 1, 262155, 262146, 1, 262155, 262147, 1, 131077, 262148, 1, 131077, 262149, 1, 131077, 262150, 1, 131083, 262151, 1, 196612, 262152, 1, 131083, 262153, 2, 2, 262154, 2, 65544 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 48.6619, 100.711 )
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
-position = Vector2( 38.9266, -29.695 )
-current = true
-drag_margin_h_enabled = true
-drag_margin_v_enabled = true
-drag_margin_left = 0.0
-drag_margin_top = 1.0
-drag_margin_right = 0.0
-drag_margin_bottom = 0.3
+[node name="Camera2D" parent="Player" instance=ExtResource( 2 )]
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="Player/Camera2D"]
-
-[node name="BackgroundLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
-motion_scale = Vector2( 0, 0 )
-motion_mirroring = Vector2( 256, 144 )
-
-[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/BackgroundLayer"]
-margin_right = 512.0
-margin_bottom = 288.0
-rect_scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 2 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SunLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
-position = Vector2( -42.3785, 2.11893 )
-motion_scale = Vector2( 0, 0 )
-
-[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/SunLayer"]
-margin_left = -92.7172
-margin_top = -54.4914
-margin_right = 419.283
-margin_bottom = 233.509
-rect_scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 7 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="SkyLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
-motion_scale = Vector2( 0.2, 0.2 )
-motion_mirroring = Vector2( 256, 0 )
-
-[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/SkyLayer"]
-margin_left = 3.05176e-05
-margin_top = -66.4308
-margin_right = 512.0
-margin_bottom = 221.569
-rect_scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 4 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CloudLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
-position = Vector2( 0, -0.21022 )
-motion_scale = Vector2( 0.3, 1 )
-motion_mirroring = Vector2( 256, 144 )
-script = ExtResource( 9 )
-cload_speed = -5.0
-
-[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/CloudLayer"]
-margin_right = 512.0
-margin_bottom = 288.0
-rect_scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 6 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MountiansLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxBackground"]
-motion_scale = Vector2( 0.5, 0.5 )
-motion_mirroring = Vector2( 256, 0 )
-
-[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxBackground/MountiansLayer"]
-margin_left = -0.840912
-margin_top = -31.1132
-margin_right = 511.159
-margin_bottom = 256.887
-rect_scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 8 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ParallaxForeground" type="ParallaxBackground" parent="Player/Camera2D"]
-layer = 1
-
-[node name="CloudLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxForeground"]
-visible = false
-position = Vector2( 0, -0.21022 )
-motion_scale = Vector2( 0.8, 1 )
-motion_mirroring = Vector2( 256, 144 )
-script = ExtResource( 9 )
-cload_speed = -5.0
-
-[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxForeground/CloudLayer"]
-margin_right = 512.0
-margin_bottom = 288.0
-rect_scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 6 )
-expand = true
-flip_h = true
-flip_v = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="GroundLayer" type="ParallaxLayer" parent="Player/Camera2D/ParallaxForeground"]
-motion_scale = Vector2( 2, 1 )
-motion_mirroring = Vector2( 256, 0 )
-
-[node name="TextureRect" type="TextureRect" parent="Player/Camera2D/ParallaxForeground/GroundLayer"]
-margin_right = 512.0
-margin_bottom = 288.0
-rect_scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 5 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="32X34" type="TileMap" parent="."]
+tile_set = ExtResource( 4 )
+cell_size = Vector2( 32, 32 )
+collision_layer = 2
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( 131075, 1, 65539, 131076, 1, 131077, 131077, 1, 65542, 196611, 1, 131075, 196612, 1, 131088, 196613, 1, 196614, 196616, 2, 0, 196617, 2, 65543, 196618, 2, 8, 327679, 1, 65546, 262144, 1, 262155, 262145, 1, 65552, 262146, 1, 262155, 262147, 1, 131077, 262148, 1, 131077, 262149, 1, 131077, 262150, 1, 131083, 262151, 1, 196612, 262152, 1, 131083, 262153, 2, 2, 262154, 2, 65544 )
 
 [node name="Goblin" parent="." instance=ExtResource( 3 )]
-position = Vector2( 131.032, 82.5248 )
+position = Vector2( 132.545, 47.6197 )
 
 [node name="Bird" parent="." instance=ExtResource( 10 )]
-position = Vector2( 67.9138, 57.0501 )
+position = Vector2( 45.1828, 44.1493 )
+
+[node name="32X33" type="TileMap" parent="."]
+tile_set = ExtResource( 4 )
+cell_size = Vector2( 32, 32 )
+collision_layer = 2
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( 65539, 16, 131077, 65540, 16, 655371, 65541, 16, 655362, 131080, 16, 655361, 131081, 16, 131079, 131082, 16, 655362, 262143, 16, 655367, 196608, 16, 655372, 196609, 16, 131080, 196610, 16, 131084, 196614, 16, 655361, 196615, 16, 131084, 196616, 2, 131072, 196617, 2, 2, 196618, 2, 8, 327679, 1, 196623, 262144, 1, 65552, 262145, 1, 262155, 262146, 1, 131083, 262147, 1, 65552, 262148, 1, 131083, 262149, 1, 65552, 262150, 1, 65552, 262151, 1, 65552, 262152, 1, 196620, 262153, 2, 2, 262154, 2, 65544 )
+
+[node name="Node2D" parent="." instance=ExtResource( 5 )]
