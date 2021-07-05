@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Assets/Player/walk/walk3.png" type="Texture" id=1]
 [ext_resource path="res://Assets/Player/hit and death/hit.png" type="Texture" id=2]
@@ -12,6 +12,9 @@
 [ext_resource path="res://Assets/Player/hit and death/death.png" type="Texture" id=10]
 [ext_resource path="res://Assets/Player/walk/walk1.png" type="Texture" id=11]
 [ext_resource path="res://Assets/Player/jump/jump2.png" type="Texture" id=12]
+[ext_resource path="res://Scenes/Items/Blinker.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Scenes/Items/HurtBox.tscn" type="PackedScene" id=14]
+[ext_resource path="res://src/Shaders/Whiten_Material.tres" type="Material" id=15]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 2.63647
@@ -34,15 +37,15 @@ animations = [ {
 "name": "death",
 "speed": 2.0
 }, {
-"frames": [ ExtResource( 12 ) ],
-"loop": true,
-"name": "jumpDown",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 3 ), ExtResource( 11 ), ExtResource( 1 ) ],
 "loop": true,
 "name": "walk",
 "speed": 7.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": true,
+"name": "jumpDown",
+"speed": 5.0
 }, {
 "frames": [ ExtResource( 7 ) ],
 "loop": true,
@@ -135,13 +138,11 @@ scale = Vector2( -0.28917, 0.905825 )
 shape = SubResource( 1 )
 
 [node name="PlayerBody" type="AnimatedSprite" parent="."]
+material = ExtResource( 15 )
 position = Vector2( 0.127701, 3.58693 )
 frames = SubResource( 2 )
 animation = "idle"
 playing = true
-
-[node name="Invincibilityframes" type="Timer" parent="PlayerBody"]
-one_shot = true
 
 [node name="PlayerCollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2( 3.19508, 6.07426 )
@@ -151,21 +152,26 @@ shape = SubResource( 3 )
 anims/GunAttack = SubResource( 4 )
 anims/hit = SubResource( 5 )
 
-[node name="PlayerHitBox" type="Area2D" parent="."]
-collision_mask = 4
-
-[node name="PlayerCollisionBox" type="CollisionShape2D" parent="PlayerHitBox"]
-position = Vector2( 3.19509, 6.18561 )
-shape = SubResource( 3 )
-
 [node name="deathTimer" type="Timer" parent="."]
 wait_time = 2.0
+one_shot = true
+
+[node name="Blinker" parent="." instance=ExtResource( 13 )]
+
+[node name="HurtBox" parent="." instance=ExtResource( 14 )]
+position = Vector2( 3.1839, 6.74238 )
+scale = Vector2( 0.510794, 0.611198 )
+collision_layer = 0
+collision_mask = 4
+whiten_matetial = ExtResource( 15 )
+
+[node name="HitDuration" type="Timer" parent="."]
+wait_time = 0.5
 one_shot = true
 
 [connection signal="tween_all_completed" from="LancePivot/Lance/OverHeat" to="." method="_on_OverHeat_tween_all_completed"]
 [connection signal="tween_all_completed" from="LancePivot/Lance/CoolDown" to="." method="_on_CoolDown_tween_all_completed"]
 [connection signal="timeout" from="LancePivot/Lance/cooldownTimer" to="." method="_on_cooldownTimer_timeout"]
-[connection signal="timeout" from="PlayerBody/Invincibilityframes" to="." method="_on_Invincibilityframes_timeout"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
-[connection signal="area_entered" from="PlayerHitBox" to="." method="_on_PlayerHitBox_area_entered"]
 [connection signal="timeout" from="deathTimer" to="." method="_on_deathTimer_timeout"]
+[connection signal="area_entered" from="HurtBox" to="." method="_on_HurtBox_area_entered"]
+[connection signal="timeout" from="HitDuration" to="." method="_on_HitDuration_timeout"]

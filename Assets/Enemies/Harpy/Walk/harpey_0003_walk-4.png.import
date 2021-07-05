@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Harpy.png-f8ee2e4105f754c02f3c65946c564a71.stex"
+path="res://.import/harpey_0003_walk-4.png-ef6cbff4b6753cc183e7229c26c2d699.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/Harpy.png"
-dest_files=[ "res://.import/Harpy.png-f8ee2e4105f754c02f3c65946c564a71.stex" ]
+source_file="res://Assets/Enemies/Harpy/Walk/harpey_0003_walk-4.png"
+dest_files=[ "res://.import/harpey_0003_walk-4.png-ef6cbff4b6753cc183e7229c26c2d699.stex" ]
 
 [params]
 

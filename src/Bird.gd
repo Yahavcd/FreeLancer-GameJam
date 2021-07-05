@@ -6,11 +6,12 @@ export (float, 0, 1.0) var friction = 0.1
 export (float, 0, 1.0) var acceleration = 0.25
 export var hit_velocity = 100
 export var max_pos = 200
-export var attack_velocity = Vector2(200,150)
+export var attack_velocity = Vector2(100,200)
+export var invinceble_duarion = 0.5
 
 var velocity = Vector2.ZERO
 var dir = -1
-var lives = 1
+var lives = 2
 var is_hit = false
 var is_dead = false
 var is_attacking = false
@@ -70,12 +71,14 @@ func soar():
 func _on_HitBox_body_entered(body):
 	if body.name == "Bullet":
 		hit(self.global_position.x - body.global_position.x)
-
+		$Blinker.start_blinking(self, invinceble_duarion)
+		$HitBox.start_invincebility(invinceble_duarion)
 
 func _on_HitBox_area_entered(area):
 	if area.name == "LancePivot":
 		hit(self.global_position.x - area.get_parent().global_position.x)
-
+		$Blinker.start_blinking(self, invinceble_duarion)
+		$HitBox.start_invincebility(invinceble_duarion)
 
 func hit(direction):
 	lives -= 1

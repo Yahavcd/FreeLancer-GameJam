@@ -7,7 +7,11 @@ export var max_jump_speed = 200
 export var hit_velocity = 100
 export (float, 0, 1.0) var friction = 1
 export (float, 0, 1.0) var acceleration = 0.25
+export var invinceble_duarion = 1.5
 
+signal hit
+signal shot
+signal reload
 var cooldowntime
 var cooldown_timer
 var lastcolor
@@ -15,14 +19,15 @@ var velocity = Vector2.ZERO
 var nextShotAnimTime = 0.1
 var tween_ready = true
 var is_hit = false
-var is_invincible = false
 var bullet = preload("res://Scenes/Items/Bullet.tscn")
+var lanceCollision
 
 #Get information on players status form the gamestate
 func _ready():
 	cooldown_timer = $LancePivot/Lance/cooldownTimer
 	$LancePivot/Lance.modulate = gamestate.color
 	cooldowntime = cooldown_timer.get_wait_time()
+	lanceCollision = $LancePivot/LanceHitBox
 	
 #Physics process for input and movment
 func _physics_process(delta):
@@ -52,7 +57,8 @@ func get_input():
 		if not is_hit:
 			jump_animation()
 	
-	if is_invincible == false:	
+	if $HurtBox.is_invinceble == false:	
+		lanceCollision.set_deferred("disabled", false)
 		if Input.is_action_just_pressed("Action") and tween_ready:
 			if gamestate.shots > 0:
 				tween_cooldown("stop")
@@ -83,6 +89,7 @@ func fire():
 	var bullet_instance = bullet.instance()
 	
 	gamestate.shots -= 1
+	emit_signal("shot")
 	bullet_instance.position = gunlance.global_position
 	bullet_instance.rotation_degrees = lance.rotation_degrees
 	bullet_instance.apply_impulse(Vector2(), Vector2(bullet_speed,0).rotated(lance.rotation))
@@ -139,24 +146,19 @@ func calc_reloadtime():
 
 #Handle the hit sequance
 func hit(direction):
-	var hitbox = $PlayerHitBox/PlayerCollisionBox
-	var timer = $PlayerBody/Invincibilityframes
-	var lanceCollision = $LancePivot/LanceHitBox
+	var timer = $HitDuration
 	
-	hitbox.set_deferred("disabled", true)
 	lanceCollision.set_deferred("disabled", true)
-	
 	gamestate.lives -= 1
+	emit_signal("hit")
 	is_hit = true
 	if gamestate.lives == 0:
 		gamestate.is_dead = true
 		death()
 	if gamestate.is_dead == false:
-		is_invincible = true
+		$HurtBox.is_invinceble = true
 		timer.start()
 		animation_sprite("hit",false)
-		
-	animation_player("hit")
 	
 	velocity.y = -hit_velocity
 	if direction >= 0:
@@ -177,33 +179,23 @@ func _on_OverHeat_tween_all_completed():
 	
 #Signal the end of the cooldown timer
 func _on_cooldownTimer_timeout():
+	emit_signal("reload")
 	gamestate.shots = gamestate.maxShots
 
 #Signal the end of the cooldown tween animation
 func _on_CoolDown_tween_all_completed():
 	gamestate.color = $LancePivot/Lance.modulate
 
-#Signal the end of the Invincibilityframes
-func _on_Invincibilityframes_timeout():
-	is_hit = false
-
-#Signal the end of the Animation Player animation
-func _on_AnimationPlayer_animation_finished(anim_name):
-	var hitbox = $PlayerHitBox/PlayerCollisionBox
-	var lanceCollision = $LancePivot/LanceHitBox
-	
-	if anim_name == "hit":
-		is_invincible = false
-		hitbox.set_deferred("disabled", false)
-		lanceCollision.set_deferred("disabled", false)
-		self.set_collision_mask_bit(2, true)
-
-#Signal enemy attack
-func _on_PlayerHitBox_area_entered(area):
-	if area.name == "HitBox" and not is_hit:
-		hit(self.global_position.x - area.global_position.x)
-
 #Signal the end of death timer
 func _on_deathTimer_timeout():
 	gamestate.is_dead = false
 	get_tree().quit() 
+
+func _on_HurtBox_area_entered(area):
+	if area.name == "HitBox" and not is_hit:
+		hit(self.global_position.x - area.global_position.x)
+		$Blinker.start_blinking(self, invinceble_duarion)
+		$HurtBox.start_invincebility(invinceble_duarion)
+	   
+func _on_HitDuration_timeout():
+	is_hit = false

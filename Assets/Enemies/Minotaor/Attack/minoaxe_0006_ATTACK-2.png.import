@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Bird.png-987555547dbc91e60b5295724e85dab9.stex"
+path="res://.import/minoaxe_0006_ATTACK-2.png-f41b021acbc2942e5ba31eb94eaa839b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/Bird.png"
-dest_files=[ "res://.import/Bird.png-987555547dbc91e60b5295724e85dab9.stex" ]
+source_file="res://Assets/Enemies/Minotaor/Attack/minoaxe_0006_ATTACK-2.png"
+dest_files=[ "res://.import/minoaxe_0006_ATTACK-2.png-f41b021acbc2942e5ba31eb94eaa839b.stex" ]
 
 [params]
 

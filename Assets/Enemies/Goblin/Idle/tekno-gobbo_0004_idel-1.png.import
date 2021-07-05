@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Slime.png-b000dd7a00740bc68a34a6d318d8cc82.stex"
+path="res://.import/tekno-gobbo_0004_idel-1.png-c5092ac962f463cb7d0a47ee30e70af0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Enemies/Slime.png"
-dest_files=[ "res://.import/Slime.png-b000dd7a00740bc68a34a6d318d8cc82.stex" ]
+source_file="res://Assets/Enemies/Goblin/Idle/tekno-gobbo_0004_idel-1.png"
+dest_files=[ "res://.import/tekno-gobbo_0004_idel-1.png-c5092ac962f463cb7d0a47ee30e70af0.stex" ]
 
 [params]
 
