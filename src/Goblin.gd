@@ -5,23 +5,24 @@ export var gravity = 400
 export (float, 0, 1.0) var friction = 0.1
 export (float, 0, 1.0) var acceleration = 0.25
 export var hit_velocity = 100
-export var invinceble_duarion = 0.5
+export var invinceble_duarion = 0.1
 
 var velocity = Vector2.ZERO
 var dir = -1
-var lives = 2
+var lives = 1
 var is_hit = false
-var is_dead = false
 
 func _physics_process(delta):
 	diraction()
 	move()
 	velocity.y += gravity * delta
 	velocity = move_and_slide(velocity, Vector2.UP)
+	if (velocity.y > 700):
+		death()
 	
 func move():
 	if is_on_floor():	
-		if dir != 0 and !is_dead:
+		if dir != 0 and !$HitBox.is_dead:
 			velocity.x = lerp(velocity.x, dir * speed, acceleration)
 		else:
 			velocity.x = lerp(velocity.x, 0, friction)
@@ -47,7 +48,7 @@ func hit(direction):
 	lives -= 1
 	is_hit = true
 	if lives == 0:
-		is_dead = true
+		$HitBox.is_dead = true
 		death()
 		
 	velocity.y = -hit_velocity
@@ -57,7 +58,7 @@ func hit(direction):
 		velocity.x = -hit_velocity
 
 func death():
-	is_dead = true
+	$HitBox.is_dead = true
 	$HitBox/CollisionShape2D.set_deferred("disabled", true)
 	$AnimationPlayer.play("death")	
 

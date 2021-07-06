@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
-export var speed = 150
+export var speed = 120
+export var in_air_speed = 2
 export var bullet_speed = 500
 export var gravity = 400
 export var max_jump_speed = 200
@@ -12,8 +13,7 @@ export var invinceble_duarion = 1.5
 signal hit
 signal shot
 signal reload
-var cooldowntime
-var cooldown_timer
+signal is_reloading
 var lastcolor
 var velocity = Vector2.ZERO
 var nextShotAnimTime = 0.1
@@ -21,12 +21,11 @@ var tween_ready = true
 var is_hit = false
 var bullet = preload("res://Scenes/Items/Bullet.tscn")
 var lanceCollision
+var current_pos
 
 #Get information on players status form the gamestate
 func _ready():
-	cooldown_timer = $LancePivot/Lance/cooldownTimer
 	$LancePivot/Lance.modulate = gamestate.color
-	cooldowntime = cooldown_timer.get_wait_time()
 	lanceCollision = $LancePivot/LanceHitBox
 	
 #Physics process for input and movment
@@ -34,13 +33,15 @@ func _physics_process(delta):
 	get_input()
 	velocity.y += gravity * delta
 	velocity = move_and_slide(velocity, Vector2.UP)
-#	if is_on_floor():
-#		gamestate.shots = gamestate.maxShots
+	if (velocity.y > 700) and not gamestate.is_dead:
+		global_position = current_pos
+		hit(0)
+		#need area2d world limit
 
 #Process input into movment and actions
 func get_input():
+	var dir = 0
 	if is_on_floor():	
-		var dir = 0
 		if Input.is_action_pressed("Right") and not is_hit:
 			animation_sprite("walk",false)
 			dir += 1
@@ -56,31 +57,31 @@ func get_input():
 	else:
 		if not is_hit:
 			jump_animation()
+			if Input.is_action_pressed("Right"):
+				dir += 1
+			if Input.is_action_pressed("Left"):
+				dir -= 1
+			if dir != 0:
+				velocity.x += dir * in_air_speed
+		else:
+			velocity.x = lerp(velocity.x, 0, friction)
 	
 	if $HurtBox.is_invinceble == false:	
 		lanceCollision.set_deferred("disabled", false)
 		if Input.is_action_just_pressed("Action") and tween_ready:
 			if gamestate.shots > 0:
 				tween_cooldown("stop")
-				cooldown_timer.start()
 				fire()
 				tween_overheat("shot")
 				animation_player("GunAttack")
 				jump()
-			else:
-				tween_cooldown("stop")
-				tween_overheat("reload")
-	
-		if Input.is_action_pressed("Reload") and tween_ready:
-			tween_cooldown("stop")
-			tween_overheat("reload")
 
 #Calculate the jump and slide trajectory after firing
 func jump():
 	var lance = $LancePivot
 
 	velocity.y = cos(deg2rad(lance.rotation_degrees+90)) * max_jump_speed
-	velocity.x += -sin(deg2rad(lance.rotation_degrees+90)) * max_jump_speed
+	velocity.x = -sin(deg2rad(lance.rotation_degrees+90)) * max_jump_speed
 
 #Instance a bullet after firing
 func fire():
@@ -119,13 +120,6 @@ func tween_overheat(tweenAnimation):
 		OverHeat.interpolate_property($LancePivot/Lance, "modulate", lastcolor, gamestate.color - Color(0,0.15,0.15,0), nextShotAnimTime, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		OverHeat.start()
 		tween_ready = false
-		
-	if tweenAnimation == "reload":
-		gamestate.color = $LancePivot/Lance.modulate
-		OverHeat.interpolate_property($LancePivot/Lance, "modulate", gamestate.color, Color(1,1,1,1), calc_reloadtime(), Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-		gamestate.shots = gamestate.maxShots
-		OverHeat.start()
-		tween_ready = false
 
 #Handle the tween cooldown animations
 func tween_cooldown(tweenAnimation):
@@ -135,25 +129,28 @@ func tween_cooldown(tweenAnimation):
 		CoolDown.remove_all()
 		
 	if tweenAnimation == "cooldown":
-		CoolDown.interpolate_property($LancePivot/Lance, "modulate", gamestate.color, Color(1,1,1,1), cooldowntime, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		emit_signal("is_reloading", calc_reloadtime())
+		CoolDown.interpolate_property($LancePivot/Lance, "modulate", gamestate.color, Color(1,1,1,1), calc_reloadtime(), Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		CoolDown.start()
-
+	
 #Calculate reload time
 func calc_reloadtime():
 	var calcReloadtime
-	calcReloadtime = gamestate.reloadAnimTime - (gamestate.color.g * gamestate.reloadAnimTime)
+	calcReloadtime = gamestate.reloadAnimTime - 0.25 * (float(gamestate.shots)/gamestate.maxShots)
 	return calcReloadtime
 
 #Handle the hit sequance
 func hit(direction):
 	var timer = $HitDuration
 	
+	$Blinker.start_blinking(self, invinceble_duarion)
+	$HurtBox.start_invincebility(invinceble_duarion)
+	
 	lanceCollision.set_deferred("disabled", true)
 	gamestate.lives -= 1
 	emit_signal("hit")
 	is_hit = true
 	if gamestate.lives == 0:
-		gamestate.is_dead = true
 		death()
 	if gamestate.is_dead == false:
 		$HurtBox.is_invinceble = true
@@ -161,13 +158,17 @@ func hit(direction):
 		animation_sprite("hit",false)
 	
 	velocity.y = -hit_velocity
-	if direction >= 0:
+	if direction == 0:
+			velocity = Vector2.ZERO
+	elif direction > 0:
 		velocity.x = hit_velocity
 	else:
 		velocity.x = -hit_velocity
 
 #Handle the death sequance
-func death():
+func death():		
+	gamestate.is_dead = true
+	$HurtBox.is_dead = true
 	animation_sprite("death",false)
 	$deathTimer.start()
 
@@ -176,15 +177,13 @@ func _on_OverHeat_tween_all_completed():
 	tween_ready = true
 	gamestate.color = $LancePivot/Lance.modulate
 	tween_cooldown("cooldown")
-	
-#Signal the end of the cooldown timer
-func _on_cooldownTimer_timeout():
-	emit_signal("reload")
-	gamestate.shots = gamestate.maxShots
 
 #Signal the end of the cooldown tween animation
 func _on_CoolDown_tween_all_completed():
+	emit_signal("reload")
+	tween_ready = true
 	gamestate.color = $LancePivot/Lance.modulate
+	gamestate.shots = gamestate.maxShots
 
 #Signal the end of death timer
 func _on_deathTimer_timeout():
@@ -194,8 +193,10 @@ func _on_deathTimer_timeout():
 func _on_HurtBox_area_entered(area):
 	if area.name == "HitBox" and not is_hit:
 		hit(self.global_position.x - area.global_position.x)
-		$Blinker.start_blinking(self, invinceble_duarion)
-		$HurtBox.start_invincebility(invinceble_duarion)
 	   
 func _on_HitDuration_timeout():
 	is_hit = false
+
+func _on_LastPosition_timeout():
+	if is_on_floor():
+		current_pos = global_position

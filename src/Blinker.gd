@@ -9,10 +9,11 @@ func _ready():
 	duration_timer = $DurationTimer
 
 func start_blinking(object, duration):
-	blink_object = object
-	duration_timer.wait_time = duration
-	duration_timer.start()
-	blink_timer.start()
+	if duration > 0:
+		blink_object = object
+		duration_timer.wait_time = duration
+		duration_timer.start()
+		blink_timer.start()
 	
 
 func _on_DurationTimer_timeout():

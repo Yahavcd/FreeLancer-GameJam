@@ -18,7 +18,7 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 8.62034, 8.50165 )
+extents = Vector2( 5.14948, 6.88865 )
 
 [sub_resource type="Animation" id=3]
 length = 0.6
@@ -36,7 +36,7 @@ tracks/0/keys = {
 }
 
 [node name="Bird" type="KinematicBody2D"]
-collision_layer = 0
+collision_layer = 4
 collision_mask = 0
 script = ExtResource( 1 )
 
@@ -44,7 +44,7 @@ script = ExtResource( 1 )
 material = ExtResource( 8 )
 frames = SubResource( 1 )
 animation = "Fly"
-frame = 1
+frame = 3
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -53,16 +53,16 @@ scale = Vector2( 1.59128, 1.49675 )
 shape = SubResource( 2 )
 
 [node name="Check" type="RayCast2D" parent="."]
-position = Vector2( 0.75, -9.25 )
+position = Vector2( 5.91488, -13.223 )
 rotation = 0.0197915
-scale = Vector2( -1.87166, 0.553151 )
+scale = Vector2( -1.30613, 0.810004 )
 enabled = true
 collision_mask = 2
 collide_with_areas = true
 
 [node name="FindPlayer" type="RayCast2D" parent="."]
 rotation = 0.350205
-scale = Vector2( 10.9012, 11.9958 )
+scale = Vector2( -7.17703, 1.6547 )
 enabled = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -71,7 +71,7 @@ anims/Death = SubResource( 3 )
 [node name="Blinker" parent="." instance=ExtResource( 6 )]
 
 [node name="HitBox" parent="." instance=ExtResource( 7 )]
-scale = Vector2( 1, 0.704481 )
+scale = Vector2( 1.26121, 0.750324 )
 collision_layer = 4
 collision_mask = 24
 whiten_matetial = ExtResource( 8 )

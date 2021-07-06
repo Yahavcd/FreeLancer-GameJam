@@ -4,8 +4,29 @@ var live
 var shots
 
 func _ready():
-	live = gamestate.lives 
-	shots = gamestate.shots
+	var count = 1
+	live = gamestate.maxlives 
+	shots = gamestate.maxShots
+	while(count < gamestate.maxlives):
+		get_node("Control/VBoxContainer/LifeBar/HBoxContainer").add_child(get_node("Control/VBoxContainer/LifeBar/HBoxContainer/TextureRect1").duplicate(8))
+		count += 1
+	count = 1
+	while(count < gamestate.maxShots):
+		get_node("Control/VBoxContainer/BulletBar/HBoxContainer").add_child(get_node("Control/VBoxContainer/BulletBar/HBoxContainer/TextureRect1").duplicate(8))
+		count += 1
+	
+	count = 1
+	for _i in get_node("Control/VBoxContainer/LifeBar/HBoxContainer").get_children():
+		_i.set_name("TextureRect" + String(count))
+		count += 1
+		
+	count = 1
+	for _i in get_node("Control/VBoxContainer/BulletBar/HBoxContainer").get_children():
+		_i.set_name("TextureRect" + String(count))
+		count += 1
+		
+	ammo()
+	lives()
 	
 func ammo():
 	if shots > gamestate.shots:
@@ -22,12 +43,10 @@ func reload():
 	while (count < gamestate.maxShots):
 		count += 1
 		get_node("Control/VBoxContainer/BulletBar/HBoxContainer/TextureRect"+String(count)).show()
-		print(count)
 	shots = gamestate.maxShots
 
 func _on_Player_hit():
 	lives()
-
 
 func _on_Player_reload():
 	reload()
