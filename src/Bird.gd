@@ -12,7 +12,7 @@ export var limit_y = 400
 
 var velocity = Vector2.ZERO
 var dir = -1
-var lives = 1
+var lives
 var attack_pos = 9999
 var is_hit = false
 var is_attacking = false
@@ -22,12 +22,28 @@ var max_pos
 var cur_position
 var save_pos_y
 var save_speed = speed
+var difficulty = 1
 
 func _ready():
 	max_pos = position.x + limit_position
 	min_pos = (position.x - limit_position)
 	cur_position = position.x
 	save_pos_y = global_position.y
+	randomize()
+	if (randi() % 2 + 1) == 1:
+		dir = -dir
+		$Sprite.flip_h = !$Sprite.flip_h
+		$FindPlayer.rotation = -$FindPlayer.rotation
+	difficulty = randi() % gamestate.difficulty + 1
+	if difficulty <= 2:
+		lives = 1
+		$Sprite.self_modulate = Color(1, 1, 1)
+	elif difficulty <= 4:
+		lives = 2
+		$Sprite.self_modulate = Color(0.941176, 0.27451, 0.27451)
+	else:
+		lives = 3
+		$Sprite.self_modulate = Color(0.213867, 0.479494, 1)
 
 func _physics_process(delta):
 	attack_player()
@@ -59,13 +75,17 @@ func diraction():
 	if !is_attacking:
 		if position.x <= min_pos:
 			dir = 1
+			$Sprite.flip_h = true
 		if position.x >= max_pos:
 			dir = -1
+			$Sprite.flip_h = false
 	else:
 		if position.x <= -attack_pos:
 			dir = -1
+			$Sprite.flip_h = false
 		if position.x >= attack_pos:
 			dir = 1
+			$Sprite.flip_h = true
 		
 	
 	if dir != chk:
@@ -76,6 +96,7 @@ func attack_player():
 		is_attacking = true
 		velocity.y = attack_velocity.y
 		speed = attack_velocity.x
+		$Sprite.play("Attack")
 
 func soar():
 	if (is_attacking and ($Check.is_colliding() or is_hit)) or position.y >= limit_y + save_pos_y:
@@ -84,6 +105,7 @@ func soar():
 		velocity.y = -speed/2
 		if is_hit:
 			velocity.y = - hit_velocity
+		$Sprite.play("Fly")
 			
 
 func _on_HitBox_body_entered(body):
@@ -114,6 +136,7 @@ func death():
 	$AnimationPlayer.play("Death")
 	$HitBox/CollisionShape2D.set_deferred("disabled", true)
 	self.set_collision_mask_bit(2, false)
+	gamestate.count_bird += 1
 
 func _on_AnimationPlayer_animation_finished(_anim_name):
 	queue_free()

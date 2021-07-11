@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Sparkwood-_-21-hub_1.ogg-e7290736bef113603b2833ebe57606f8.oggstr"
+
+[deps]
+
+source_file="res://SFX/Sparkwood-_-21-hub_1.ogg"
+dest_files=[ "res://.import/Sparkwood-_-21-hub_1.ogg-e7290736bef113603b2833ebe57606f8.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

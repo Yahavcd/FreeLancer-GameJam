@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/Bird.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Enemies/Harpy/Walk/harpey_0006_walk-1.png" type="Texture" id=2]
@@ -8,9 +8,15 @@
 [ext_resource path="res://Scenes/Items/Blinker.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/Items/HurtBox.tscn" type="PackedScene" id=7]
 [ext_resource path="res://src/Shaders/Whiten_Material.tres" type="Material" id=8]
+[ext_resource path="res://Assets/Enemies/Harpy/Attack/harpey_0002_attack-1.png" type="Texture" id=9]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
+"frames": [ ExtResource( 9 ) ],
+"loop": true,
+"name": "Attack",
+"speed": 5.0
+}, {
 "frames": [ ExtResource( 5 ), ExtResource( 4 ), ExtResource( 3 ), ExtResource( 2 ) ],
 "loop": true,
 "name": "Fly",
@@ -53,9 +59,9 @@ scale = Vector2( 1.59128, 1.49675 )
 shape = SubResource( 2 )
 
 [node name="Check" type="RayCast2D" parent="."]
-position = Vector2( 5.91488, -13.223 )
+position = Vector2( -0.223334, 0.515598 )
 rotation = 0.0197915
-scale = Vector2( -1.30613, 0.810004 )
+scale = Vector2( -6.394, 0.5 )
 enabled = true
 collision_mask = 2
 collide_with_areas = true
@@ -71,6 +77,7 @@ anims/Death = SubResource( 3 )
 [node name="Blinker" parent="." instance=ExtResource( 6 )]
 
 [node name="HitBox" parent="." instance=ExtResource( 7 )]
+position = Vector2( -0.21022, 0 )
 scale = Vector2( 1.26121, 0.750324 )
 collision_layer = 4
 collision_mask = 24

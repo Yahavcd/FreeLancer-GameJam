@@ -22,7 +22,6 @@ func _on_Player_is_reloading(calc_reloadtime):
 	started()
 
 func _on_Tween_tween_all_completed():
-	print("done")
 	finished()
 
 func update_point(pos):

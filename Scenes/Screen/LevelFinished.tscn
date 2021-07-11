@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://src/LevelFinished.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Fonts/7pixelsOfPerfection.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://SFX/Sparkwood-_-21-hub_1.ogg" type="AudioStream" id=3]
+[ext_resource path="res://Assets/UI/Assets_0007_tile-2.png" type="Texture" id=4]
+[ext_resource path="res://Assets/UI/Assets_0005_teli-pressed.png" type="Texture" id=5]
+[ext_resource path="res://Assets/UI/billboard.png" type="Texture" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
+[node name="LevelFinished" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="Background"]
+
+[node name="Background" type="TextureRect" parent="Background/ParallaxLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 512.0
+margin_bottom = 218.0
+rect_scale = Vector2( 0.502232, 0.661 )
+mouse_filter = 2
+texture = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Exit" type="TextureButton" parent="."]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 191.049
+margin_top = 108.951
+margin_right = 314.049
+margin_bottom = 148.951
+rect_scale = Vector2( 0.423437, 0.560911 )
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 5 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Exit"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_scale = Vector2( 0.99381, 1.04039 )
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Continue"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = -20.0
+autoplay = true
+
+[connection signal="pressed" from="Exit" to="." method="_on_Exit_pressed"]

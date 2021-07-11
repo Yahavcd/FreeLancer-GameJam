@@ -24,8 +24,10 @@ motion_scale = Vector2( 0, 0 )
 motion_mirroring = Vector2( 256, 144 )
 
 [node name="TextureRect" type="TextureRect" parent="ParallaxBackground/BackgroundLayer"]
+margin_left = -1.52588e-05
+margin_top = -26.9391
 margin_right = 512.0
-margin_bottom = 288.0
+margin_bottom = 261.061
 rect_scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 3 )
 expand = true
@@ -53,10 +55,10 @@ motion_scale = Vector2( 0.2, 0.2 )
 motion_mirroring = Vector2( 256, 0 )
 
 [node name="TextureRect" type="TextureRect" parent="ParallaxBackground/SkyLayer"]
-margin_left = 3.05176e-05
-margin_top = -66.4308
-margin_right = 512.0
-margin_bottom = 221.569
+margin_left = -1.82111
+margin_top = -67.5996
+margin_right = 510.179
+margin_bottom = 220.4
 rect_scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 2 )
 expand = true
@@ -82,15 +84,16 @@ __meta__ = {
 }
 
 [node name="MountiansLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_scale = Vector2( 0.5, 0.5 )
+motion_scale = Vector2( 0.2, 0 )
+motion_offset = Vector2( 0, 1 )
 motion_mirroring = Vector2( 256, 0 )
 
 [node name="TextureRect" type="TextureRect" parent="ParallaxBackground/MountiansLayer"]
 self_modulate = Color( 0.745098, 0.745098, 0.745098, 1 )
-margin_left = -0.840912
-margin_top = -31.1132
-margin_right = 511.159
-margin_bottom = 256.887
+margin_left = -2.37573
+margin_top = -62.6173
+margin_right = 509.624
+margin_bottom = 225.383
 rect_scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 5 )
 expand = true

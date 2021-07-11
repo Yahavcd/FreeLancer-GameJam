@@ -17,7 +17,7 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 8.62034, 8.50165 )
+extents = Vector2( 5.08948, 8.3337 )
 
 [sub_resource type="Animation" id=3]
 resource_name = "death"
@@ -44,20 +44,29 @@ script = ExtResource( 2 )
 material = ExtResource( 7 )
 frames = SubResource( 1 )
 animation = "walk"
+frame = 2
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -0.739708, 0.0947969 )
+position = Vector2( -0.109036, 1.35614 )
 scale = Vector2( 0.880222, 0.927316 )
 shape = SubResource( 2 )
 
 [node name="Check" type="RayCast2D" parent="."]
-position = Vector2( -11.6629, -17.6414 )
+position = Vector2( -11.6629, -5.76979 )
 scale = Vector2( -2.29484, 0.639843 )
 enabled = true
 collision_mask = 2
 
+[node name="Check2" type="RayCast2D" parent="."]
+position = Vector2( 0.353943, 1.00597e-14 )
+rotation = -1.5708
+scale = Vector2( -0.466098, -0.234394 )
+enabled = true
+collision_mask = 2
+
 [node name="HitBox" parent="." instance=ExtResource( 6 )]
+position = Vector2( 0.315338, 1.47157 )
 scale = Vector2( 0.77009, 0.461345 )
 collision_layer = 4
 collision_mask = 24

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Artifice-cave.ogg-511df27693d9d0594fd7c6eb1b89472f.oggstr"
+
+[deps]
+
+source_file="res://SFX/Artifice-cave.ogg"
+dest_files=[ "res://.import/Artifice-cave.ogg-511df27693d9d0594fd7c6eb1b89472f.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

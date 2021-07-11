@@ -1,0 +1,135 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Scenes/Items/Blinker.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/Items/HurtBox.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/Shaders/Whiten_Material.tres" type="Material" id=3]
+[ext_resource path="res://Assets/Enemies/Minotaor/Jump/minoaxe_0000_JUMP.png" type="Texture" id=4]
+[ext_resource path="res://Assets/Enemies/Minotaor/Attack/minoaxe_0006_ATTACK-2.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Enemies/Minotaor/Attack/minoaxe_0007_ATTACK-1.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Enemies/Minotaor/Attack/minoaxe_0005_ATTACK3.png" type="Texture" id=7]
+[ext_resource path="res://Assets/Enemies/Minotaor/Walk/minoaxe_0001_WALK2.png" type="Texture" id=8]
+[ext_resource path="res://Assets/Enemies/Minotaor/Walk/minoaxe_0002_WALK1.png" type="Texture" id=9]
+[ext_resource path="res://src/MinotaorBoss.gd" type="Script" id=10]
+[ext_resource path="res://src/HitBox.gd" type="Script" id=11]
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "walk",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ), ExtResource( 7 ) ],
+"loop": false,
+"name": "attack2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "attack1",
+"speed": 3.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 10.1318, 17.3802 )
+
+[sub_resource type="CapsuleShape2D" id=5]
+
+[sub_resource type="Animation" id=8]
+resource_name = "death"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="CapsuleShape2D" id=9]
+radius = 8.64548
+height = 18.1747
+
+[node name="MinotaorBoss" type="KinematicBody2D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource( 10 )
+
+[node name="Sprite" type="AnimatedSprite" parent="."]
+material = ExtResource( 3 )
+scale = Vector2( 3, 3 )
+frames = SubResource( 6 )
+animation = "attack2"
+frame = 1
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 23.0536, 11.0069 )
+scale = Vector2( 2, -2 )
+shape = SubResource( 7 )
+
+[node name="Check" type="RayCast2D" parent="."]
+rotation = 1.5708
+scale = Vector2( 1, 0.4 )
+enabled = true
+collision_mask = 2
+
+[node name="CheckPlayer" type="RayCast2D" parent="."]
+position = Vector2( 0, 40.162 )
+rotation = 1.5708
+scale = Vector2( 1.6812, 0.818905 )
+enabled = true
+collide_with_areas = true
+
+[node name="HeadBox" parent="." instance=ExtResource( 2 )]
+position = Vector2( 4.90096, -11.9356 )
+scale = Vector2( 0.921787, 0.511993 )
+collision_layer = 4
+collision_mask = 24
+whiten_matetial = ExtResource( 3 )
+
+[node name="HitBox" type="Area2D" parent="."]
+position = Vector2( 24.4511, 9.50177 )
+scale = Vector2( 2.75889, 1.84851 )
+collision_layer = 4
+collision_mask = 0
+script = ExtResource( 11 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource( 5 )
+
+[node name="Blinker" parent="." instance=ExtResource( 1 )]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/death = SubResource( 8 )
+
+[node name="Attack" type="Area2D" parent="."]
+position = Vector2( -4.45952, -2.67572 )
+scale = Vector2( 1.76931, 1.58069 )
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack"]
+position = Vector2( -19.804, 5.659 )
+scale = Vector2( 1.5304, 1.66948 )
+shape = SubResource( 9 )
+disabled = true
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="is_hit" from="." to="HitBox" method="_on_MinotaorBoss_is_hit"]
+[connection signal="area_entered" from="HeadBox" to="." method="_on_HeadBox_area_entered"]
+[connection signal="body_entered" from="HeadBox" to="." method="_on_HeadBox_body_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

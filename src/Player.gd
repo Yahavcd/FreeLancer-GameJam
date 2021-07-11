@@ -8,7 +8,7 @@ export var max_jump_speed = 200
 export var hit_velocity = 100
 export (float, 0, 1.0) var friction = 1
 export (float, 0, 1.0) var acceleration = 0.25
-export var invinceble_duarion = 1.5
+export var invinceble_duarion = 2
 
 signal hit
 signal shot
@@ -88,6 +88,7 @@ func fire():
 	var lance = $LancePivot
 	var gunlance = $LancePivot/Lance/GunLance	
 	var bullet_instance = bullet.instance()
+	$Shot.play()
 	
 	gamestate.shots -= 1
 	emit_signal("shot")
@@ -132,6 +133,7 @@ func tween_cooldown(tweenAnimation):
 		emit_signal("is_reloading", calc_reloadtime())
 		CoolDown.interpolate_property($LancePivot/Lance, "modulate", gamestate.color, Color(1,1,1,1), calc_reloadtime(), Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 		CoolDown.start()
+		$reload.play()
 	
 #Calculate reload time
 func calc_reloadtime():
@@ -151,6 +153,7 @@ func hit(direction):
 	emit_signal("hit")
 	is_hit = true
 	if gamestate.lives == 0:
+		tween_cooldown("stop")
 		death()
 	if gamestate.is_dead == false:
 		$HurtBox.is_invinceble = true
@@ -188,10 +191,10 @@ func _on_CoolDown_tween_all_completed():
 #Signal the end of death timer
 func _on_deathTimer_timeout():
 	gamestate.is_dead = false
-	get_tree().quit() 
+	get_tree().change_scene("res://Scenes/Screen/Death Screen.tscn")
 
 func _on_HurtBox_area_entered(area):
-	if area.name == "HitBox" and not is_hit:
+	if (area.name == "HitBox" or area.name == "Attack") and not is_hit:
 		hit(self.global_position.x - area.global_position.x)
 	   
 func _on_HitDuration_timeout():

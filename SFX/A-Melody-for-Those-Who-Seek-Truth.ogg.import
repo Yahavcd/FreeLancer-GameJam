@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/A-Melody-for-Those-Who-Seek-Truth.ogg-e2b2aa55d1f8f9a7a4b92b9ecaaaca18.oggstr"
+
+[deps]
+
+source_file="res://SFX/A-Melody-for-Those-Who-Seek-Truth.ogg"
+dest_files=[ "res://.import/A-Melody-for-Those-Who-Seek-Truth.ogg-e2b2aa55d1f8f9a7a4b92b9ecaaaca18.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

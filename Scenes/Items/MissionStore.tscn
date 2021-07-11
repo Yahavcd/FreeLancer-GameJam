@@ -1,0 +1,354 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Assets/UI/billboard.png" type="Texture" id=1]
+[ext_resource path="res://Assets/UI/Assets_0007_tile-2.png" type="Texture" id=2]
+[ext_resource path="res://Assets/UI/Assets_0005_teli-pressed.png" type="Texture" id=3]
+[ext_resource path="res://Assets/Fonts/7pixelsOfPerfection.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://src/MissionStore.gd" type="Script" id=5]
+[ext_resource path="res://Scenes/UI/UI.tscn" type="PackedScene" id=6]
+[ext_resource path="res://SFX/Sparkwood-_-21-hub_1.ogg" type="AudioStream" id=7]
+[ext_resource path="res://Assets/UI/Assets_0009_bullet.png" type="Texture" id=8]
+[ext_resource path="res://Assets/UI/Assets_0010_heart.png" type="Texture" id=9]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 4 )
+
+[node name="MissionStore" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="Background" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="Background"]
+
+[node name="Background" type="TextureRect" parent="Background/ParallaxLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 512.0
+margin_bottom = 218.0
+rect_scale = Vector2( 0.5, 0.661 )
+mouse_filter = 2
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UI" parent="." instance=ExtResource( 6 )]
+layer = -1
+
+[node name="Menus" type="Node2D" parent="."]
+scale = Vector2( 0.5, 0.661 )
+
+[node name="Jobs" type="TextureButton" parent="Menus"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 185.0
+margin_top = 56.0
+margin_right = 308.0
+margin_bottom = 96.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Menus/Jobs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "JOBS"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Store" type="TextureButton" parent="Menus"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 185.0
+margin_top = 130.0
+margin_right = 308.0
+margin_bottom = 170.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Menus/Store"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Store"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Exit" type="TextureButton" parent="Menus"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 21.239
+margin_top = 166.048
+margin_right = 144.239
+margin_bottom = 206.048
+rect_scale = Vector2( 0.705738, 0.84091 )
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Menus/Exit"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_scale = Vector2( 0.99381, 1.04039 )
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Exit Game"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Jobs" type="Node2D" parent="."]
+visible = false
+scale = Vector2( 0.5, 0.661 )
+
+[node name="Plains" type="TextureButton" parent="Jobs"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 185.0
+margin_top = 19.0
+margin_right = 308.0
+margin_bottom = 59.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Jobs/Plains"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "PLAINS
+          "
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Cave" type="TextureButton" parent="Jobs"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 185.0
+margin_top = 81.0
+margin_right = 308.0
+margin_bottom = 121.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Jobs/Cave"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "CAVE
+          "
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Platforms" type="TextureButton" parent="Jobs"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 185.0
+margin_top = 143.0
+margin_right = 308.0
+margin_bottom = 183.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Jobs/Platforms"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "PLATFORMS
+          "
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="TextureButton" parent="Jobs"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 21.239
+margin_top = 166.048
+margin_right = 144.239
+margin_bottom = 206.048
+rect_scale = Vector2( 0.428635, 0.774866 )
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Jobs/Back"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -114.185
+margin_top = -20.4759
+margin_right = -114.185
+margin_bottom = -20.4759
+rect_scale = Vector2( 2.89855, 1.85502 )
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Back"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Store" type="Node2D" parent="."]
+visible = false
+scale = Vector2( 0.5, 0.661 )
+
+[node name="Life" type="TextureButton" parent="Store"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 185.0
+margin_top = 56.0
+margin_right = 308.0
+margin_bottom = 96.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Store/Life"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Life
+10000"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="Store/Life"]
+position = Vector2( 25, 20 )
+scale = Vector2( 4, 3 )
+texture = ExtResource( 9 )
+
+[node name="Bullets" type="TextureButton" parent="Store"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 185.0
+margin_top = 130.0
+margin_right = 308.0
+margin_bottom = 170.0
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Store/Bullets"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Bullets
+7500"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sprite" type="Sprite" parent="Store/Bullets"]
+position = Vector2( 24, 20 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 8 )
+
+[node name="Back" type="TextureButton" parent="Store"]
+modulate = Color( 0.862745, 0.670588, 0.670588, 1 )
+margin_left = 21.239
+margin_top = 166.048
+margin_right = 144.239
+margin_bottom = 206.048
+rect_scale = Vector2( 0.428635, 0.774866 )
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Store/Back"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -114.185
+margin_top = -20.4759
+margin_right = -114.185
+margin_bottom = -20.4759
+rect_scale = Vector2( 2.89855, 1.85502 )
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 0.92549, 0.376471, 0.376471, 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "Back"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+volume_db = -20.0
+autoplay = true
+
+[connection signal="pressed" from="Menus/Jobs" to="." method="_on_Jobs_pressed"]
+[connection signal="pressed" from="Menus/Store" to="." method="_on_Store_pressed"]
+[connection signal="pressed" from="Menus/Exit" to="." method="_on_Exit_pressed"]
+[connection signal="pressed" from="Jobs/Plains" to="." method="_on_Plains_pressed"]
+[connection signal="pressed" from="Jobs/Cave" to="." method="_on_Cave_pressed"]
+[connection signal="pressed" from="Jobs/Platforms" to="." method="_on_Platforms_pressed"]
+[connection signal="pressed" from="Jobs/Back" to="." method="_on_Back_pressed"]
+[connection signal="pressed" from="Store/Life" to="." method="_on_Life_pressed"]
+[connection signal="pressed" from="Store/Bullets" to="." method="_on_Bullets_pressed"]
+[connection signal="button_down" from="Store/Back" to="." method="_on_Back_button_down"]
